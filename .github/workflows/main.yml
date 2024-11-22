@@ -23,7 +23,7 @@ jobs:
         run: |
           wget "https://sourcemod.net/latest.php?os=linux&version=1.12" -O /tmp/sourcemod.tar.gz
           mkdir ~/sm && cd ~/sm
-          tar xzf /tmp/sourcemod.tar.gz ./
+          tar xzf /tmp/sourcemod.tar.gz addons/sourcemod/scripting
           echo "$PWD/addons/sourcemod/scripting" >> $GITHUB_PATH
 
       - name: Download & install SM Builder
