@@ -36,7 +36,7 @@ jobs:
         run: python generate_auto_version.py build-$BUILD_NUMBER
 
       - name: Build plugins
-        run: smbuilder --flags "-i=addons/sourcemod/scripting/include/ -i=../addons/sourcemod/scripting/include"
+        run: smbuilder --flags "-i=./addons/sourcemod/scripting/include/ -i=$PWD/addons/sourcemod/scripting/include"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
