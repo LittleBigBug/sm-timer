@@ -21,23 +21,22 @@ jobs:
       
       - name: Download SM & add it to PATH
         run: |
-          wget "https://sourcemod.net/latest.php?os=linux&version=1.10" -O /tmp/sourcemod.tar.gz
+          wget "https://sourcemod.net/latest.php?os=linux&version=1.12" -O /tmp/sourcemod.tar.gz
           mkdir ~/sm && cd ~/sm
           tar xzf /tmp/sourcemod.tar.gz addons/sourcemod/scripting
           echo "$PWD/addons/sourcemod/scripting" >> $GITHUB_PATH
 
       - name: Download & install SM Builder
         run: |
-          git clone "https://github.com/TotallyMehis/sm-builder" ~/sm-builder
+          git clone "https://github.com/LittleBigBug/sm-builder" ~/sm-builder
           cd ~/sm-builder
-          pip install --user -r requirements.txt
-          python setup.py install --prefix=~/.local
+          pipx install ./
 
       - name: Generate autoversion.inc
         run: python generate_auto_version.py build-$BUILD_NUMBER
 
       - name: Build plugins
-        run: smbuilder --flags " -i=addons/sourcemod/scripting/include"
+        run: smbuilder --flags "-i=./addons/sourcemod/scripting/include/ -i=$HOME/sm/addons/sourcemod/scripting/include"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
