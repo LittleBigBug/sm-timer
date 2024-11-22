@@ -839,6 +839,13 @@ public void Influx_OnMapIdRetrieved( int mapid, bool bNew )
     }
 }
 
+// After map id and runs have been fully loaded.
+public void Influx_OnPostRunLoad()
+{
+    PrintToServer( INF_CON_PRE..."Retrieving best records..." );
+    DB_InitRecords();
+}
+
 public void Influx_RequestHelpCmds()
 {
     Influx_AddHelpCommand( "manageruns", "Run menu.", true );
@@ -919,10 +926,6 @@ public void OnMapStart()
     g_iCurMapId = 0;
     
     DB_InitMap();
-    
-    
-    //LoadRuns();
-    
     
     InitColors();
 }
@@ -2268,16 +2271,6 @@ stock float GetModeMaxspeedByIndex( int index )
     }
 }
 
-stock bool IsProperlyCached( int client = 0 )
-{
-    // Check if we are cached properly.
-    
-    if ( !client ) return g_bBestTimesCached;
-    
-    
-    return ( g_bBestTimesCached && g_bCachedTimes[client] );
-}
-
 stock void InvalidateClientRun( int client )
 {
     if ( g_iRunState[client] != STATE_NONE )
@@ -2845,8 +2838,11 @@ stock int AddRun(   int runid,
                     bool bDoForward = true,
                     bool bPrint = false )
 {
-    if ( g_hRuns == null ) return -1;
-    
+    if ( g_hRuns == null )
+    {
+        LogError( INF_CON_PRE..."Unable to add run (id: %i) because runs array hasn't been initialized yet!", runid );
+        return -1;
+    }
     
     // If they didn't request a specific id, find one that doesn't exist.
     if ( runid == -1 )
@@ -2872,9 +2868,12 @@ stock int AddRun(   int runid,
         }
     }
     
-    
-    if ( runid < 1 ) return -1;
-    
+    if ( runid < 1 )
+    {
+        LogError( INF_CON_PRE..."Cannot add a run with id lower than 1! (tried: %i)", runid );
+        return -1;
+    }
+
     // That run already exists!
     if ( FindRunById( runid ) != -1 )
     {
@@ -3060,6 +3059,8 @@ stock void SendRunLoadPre()
 
 stock void SendRunLoadPost()
 {
+    PrintToServer( INF_CON_PRE..."Finished retrieving %i runs!", g_hRuns.Length );
+
     Call_StartForward( g_hForward_OnPostRunLoad );
     Call_Finish();
 }
@@ -3209,9 +3210,8 @@ stock void LoadRuns( bool bForceType = false, bool bUseDb = false, bool bFallbac
     {
         SendRunLoadPre();
         ReadRunFile();
-        SendRunLoadPost();
-
         g_bRunsLoaded = true;
+        SendRunLoadPost();
     }
 }
 

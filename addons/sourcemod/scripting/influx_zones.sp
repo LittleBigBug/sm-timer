@@ -1013,7 +1013,7 @@ stock void GetZoneTypeShortNameByIndex( int index, char[] sz, int len )
         
         for ( int i = 0; i < MAX_ZONE_NAME_CELL; i++ )
         {
-            name[i] = g_hZoneTypes.Get( index, ZoneTypeData_t::szSafeName + i ); 
+            name[i] = g_hZoneTypes.Get( index, ZoneTypeData_t::szSafeName + i );
         }
         
         strcopy( sz, len, view_as<char>( name ) );
@@ -1222,31 +1222,23 @@ stock bool LoadZoneFromKv( KeyValues kv )
             LogError( INF_CON_PRE..."Couldn't find zone name! (id: %i)", zoneid );
         }
     }
-    
+
     
     // Ask other plugins what to load.
-    Action res = Plugin_Handled;
+    Action res = Plugin_Continue;
     
     Call_StartForward( g_hForward_OnZoneLoad );
     Call_PushCell( zoneid );
     Call_PushCell( zonetype );
     Call_PushCell( view_as<int>( kv ) );
     Call_Finish( res );
-    
-    if ( res != Plugin_Handled )
-    {
-#if defined DEBUG_LOADZONES
-        PrintToServer( INF_DEBUG_PRE..."OnZoneLoad failed (id: %i)!", zoneid );
-#endif
 
-        if ( res == Plugin_Stop )
-        {
-            LogError( INF_CON_PRE..."Couldn't load zone %s with type %i from file! (id: %i)",
-                zone.szName,
-                zonetype,
-                zoneid );
-        }
-        
+    if ( res == Plugin_Stop )
+    {
+        LogError( INF_CON_PRE..."Couldn't load zone %s with type %i from file! (id: %i)",
+            zone.szName,
+            zonetype,
+            zoneid );
         return false;
     }
     
