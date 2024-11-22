@@ -269,7 +269,7 @@ public void OnPluginStart()
             
             for ( int i = 0; i < len; i++ )
             {
-                Influx_OnRunCreated( runs.Get( i, Run_t::iRunId ) );
+                Influx_OnRunCreated( runs.Get( i, Run_t::iId ) );
             }
             
             Influx_OnPostRunLoad();
@@ -570,7 +570,7 @@ stock void SetReplayBot( int bot )
     FindNewPlayback();
 }
 
-stock void OnClientDisconnect( int client )
+public void OnClientDisconnect( int client )
 {
     if ( client == g_iReplayRequester )
     {

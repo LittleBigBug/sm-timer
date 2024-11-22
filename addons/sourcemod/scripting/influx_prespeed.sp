@@ -154,7 +154,7 @@ public void OnPluginStart()
             
             for ( int i = 0; i < len; i++ )
             {
-                Influx_OnRunCreated( runs.Get( i, Run_t::iRunId ) );
+                Influx_OnRunCreated( runs.Get( i, Run_t::iId ) );
             }    
         }
 
@@ -449,7 +449,7 @@ stock int GetMaxJumpsByIndexSafe( int index )
     if ( index == -1 )
         return g_ConVar_MaxJumps.IntValue;
 
-    int jumps = g_hPre.Get( index, Prespeed_t::nMaxJumps );
+    int jumps = g_hRunPrespeeds.Get( index, Prespeed_t::nMaxJumps );
     return ( jumps == INVALID_MAXJUMPS ) ? g_ConVar_MaxJumps.IntValue : jumps;
 }
 
@@ -463,7 +463,7 @@ stock float GetMaxSpeedByIndexSafe( int index )
     if ( index == -1 )
         return g_ConVar_Max.FloatValue;
 
-    float spd = g_hPre.Get( index, Prespeed_t::flMaxSpeed );
+    float spd = g_hRunPrespeeds.Get( index, Prespeed_t::flMaxSpeed );
     return ( spd == INVALID_MAXSPD ) ? g_ConVar_Max.FloatValue : spd;
 }
 
@@ -472,7 +472,7 @@ stock int GetUseTrueVelByIndexSafe( int index )
     if ( index == -1 )
         return g_ConVar_UseTrueVel.IntValue;
 
-    int usetruevel = g_hPre.Get( index, Prespeed_t::iUseTrueVel );
+    int usetruevel = g_hRunPrespeeds.Get( index, Prespeed_t::iUseTrueVel );
     return ( usetruevel == INVALID_USETRUEVEL ) ? g_ConVar_UseTrueVel.IntValue : usetruevel;
 }
 
@@ -481,7 +481,7 @@ stock int GetCapStyleByIndexSafe( int index )
     if ( index == -1 )
         return g_ConVar_Cap.IntValue;
 
-    int capstyle = g_hPre.Get( index, Prespeed_t::iDoCap );
+    int capstyle = g_hRunPrespeeds.Get( index, Prespeed_t::iDoCap );
     return ( capstyle == INVALID_DOCAP ) ? g_ConVar_Cap.IntValue : capstyle;
 }
 
@@ -504,7 +504,7 @@ stock void StartCheckPrespeed( int client, float maxprespd, bool bUseTrueVel )
 stock CappingRet_t PerformCapping( int client, int runid, char[] errormsg, int error_len, bool bOnStart )
 {
     // This should never occur.
-    int index = FindPreById( runid );
+    int index = FindPreByRunId( runid );
     if ( index == -1 )
     {
         LogError( INF_CON_PRE..."Couldn't find prespeed settings for run %i! Using defaults...", runid );

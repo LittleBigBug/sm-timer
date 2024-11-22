@@ -84,7 +84,7 @@ public void OnPluginStart()
             
             for ( int i = 0; i < len; i++ )
             {
-                Influx_OnRunCreated( runs.Get( i, Run_t::iRunId ) );
+                Influx_OnRunCreated( runs.Get( i, Run_t::iId ) );
             }
         }
         

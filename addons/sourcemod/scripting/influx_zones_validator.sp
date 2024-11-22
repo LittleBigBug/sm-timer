@@ -288,7 +288,7 @@ stock int FindClientValidatorById( int client, int id )
     {
         for ( int i = 0; i < len; i++ )
         {
-            if ( validator.Get( i, ValidatorZone_t::iId ) == id ) return i;
+            if ( validator.Get( i, ValidatorZone_t::iZoneId ) == id ) return i;
         }
     }
     
@@ -317,7 +317,7 @@ stock int FindClientNextValidatorIndex( int client )
     int lastzoneid = -1;
     if ( len > 0 )
     {
-        lastzoneid = validator.Get( len -1, ValidatorZone_t::iId );
+        lastzoneid = validator.Get( len -1, ValidatorZone_t::iZoneId );
     }
     
     // Just find the next highest zone id.
