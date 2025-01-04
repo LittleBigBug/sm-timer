@@ -9,8 +9,6 @@ public Action Cmd_Replay( int client, int args )
     
     if ( !IsValidReplayBot() ) return Plugin_Handled;
     
-    
-    
     if ( !ObserveTarget( client, g_iReplayBot ) )
     {
         return Plugin_Handled;

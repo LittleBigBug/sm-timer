@@ -16,7 +16,6 @@ public Action OnPlayerRunCmd( int client, int &buttons, int &impulse, float vel[
         return Plugin_Continue;
     }
     
-    
     /*if ( !IsPlayerAlive( client ) )
     {
         if ( GetClientTeam( client ) <= CS_TEAM_SPECTATOR )
@@ -124,7 +123,7 @@ public Action OnPlayerRunCmd( int client, int &buttons, int &impulse, float vel[
                     GetEntityFlags( client ) );
             }
 #endif
-            
+
             TeleportEntity( client, NULL_VECTOR, angles, temp );
         }
         else

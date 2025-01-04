@@ -373,8 +373,7 @@ stock bool SaveRecording( int client, ArrayList rec, int runid, int mode, int st
     
     file.Write( mapname, sizeof( mapname ), 4 );
     file.Write( plyname, sizeof( plyname ), 4 );
-    
-    
+
     int[] frame = new int[sizeof( RecordingFrame_t )];
     
     int len = rec.Length;
