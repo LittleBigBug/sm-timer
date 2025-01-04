@@ -16,12 +16,12 @@
 #include <influx/practise>
 
 
-//#define DEBUG_BOT_MOVEMENT
-//#define DEBUG_LOADRECORDINGS
-//#define DEBUG_INSERTFRAME
-//#define DEBUG
-//#define DEBUG_REPLAY
-//#define DEBUG_CVARS
+// #define DEBUG_BOT_MOVEMENT
+// #define DEBUG_LOADRECORDINGS
+// #define DEBUG_INSERTFRAME
+// #define DEBUG
+// #define DEBUG_REPLAY
+// #define DEBUG_CVARS
 
 
 #define DEF_REPLAYBOTNAME           "Replay Bot - !replay"
@@ -388,7 +388,7 @@ public void OnMapEnd()
     {
         FreeRecording( g_hRec[i] );
     }
-    
+
     ArrayList rec;
     for ( i = 0; i < g_hRunRec.Length; i++ )
         for ( j = 0; j < MAX_MODES; j++ )
@@ -523,7 +523,7 @@ public void OnClientPutInServer( int client )
     {
         ResetClientPreRun( client );
         
-        Inf_SDKHook( client, SDKHook_PostThinkPost, E_PostThinkPost_Client );
+        //Inf_SDKHook( client, SDKHook_PostThinkPost, E_PostThinkPost_Client );
     }
     else
     {
@@ -594,8 +594,7 @@ stock bool IsValidReplayBot( int bot = 0 )
 stock bool FindNewPlayback()
 {
     if ( !g_ConVar_AutoPlayback.BoolValue ) return false;
-    
-    
+
     // I know, this is really messy.
     // Just leave it. JUST DON'T LOOK AT IT, ALRIGHT!
     
@@ -693,6 +692,7 @@ stock bool FindNewPlayback()
     return false;
 }
 
+/*
 public void E_PostThinkPost_Client( int client )
 {
     if ( !IsPlayerAlive( client ) ) return;
@@ -709,6 +709,24 @@ public void E_PostThinkPost_Client( int client )
     if ( g_bLib_Pause && Influx_IsClientPaused( client ) ) return;
     
     
+    InsertFrame( client );
+}
+*/
+
+public void OnPlayerRunCmdPost( int client, int buttons, int impulse, const float vel[3], const float angles[3], int weapon, int subtype, int cmdnum, int tickcount, int seed, const int mouse[2] ) {
+    if ( !IsPlayerAlive( client ) || IsFakeClient( client ) ) return;
+
+    InsertPreRunFrame( client );
+    
+    if ( !g_bIsRec[client] ) return;
+    
+    // Practising
+    if ( g_bLib_Practise && Influx_IsClientPractising( client ) ) return;
+    
+    // Paused
+    if ( g_bLib_Pause && Influx_IsClientPaused( client ) ) return;
+    
+    // todo; why does this skip so many frames? ("laggy" replays)
     InsertFrame( client );
 }
 
@@ -1217,7 +1235,7 @@ stock void InsertPreRunFrame( int client )
     if ( !g_nMaxPreRecLength ) return;
     
     
-    static RecordingFrame_t frame;
+    RecordingFrame_t frame;
     
     FillFrame( client, frame );
     
@@ -1290,7 +1308,7 @@ stock void InsertFrame( int client )
     PrintToServer( INF_DEBUG_PRE..."(%i) | Frame: %i", client, GetGameTickCount() );
 #endif
     
-    static RecordingFrame_t frame;
+    RecordingFrame_t frame;
 
     FillFrame( client, frame );
     
